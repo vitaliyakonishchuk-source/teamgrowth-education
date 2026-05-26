@@ -14,70 +14,62 @@ const questions = [
       { text: "Іноді складно", score: 2 },
       { text: "Люблю працювати самостійно", score: 1 }
     ]
-  },
-  {
-    question: "Як ти вирішуєш конфлікти?",
-    answers: [
-      { text: "Через діалог", score: 3 },
-      { text: "Шукаю компроміс", score: 2 },
-      { text: "Уникаю конфліктів", score: 1 }
-    ]
   }
 ];
-
 let currentQuestion = 0;
 let totalScore = 0;
 
-const quiz = document.getElementById("quiz");
-const nextBtn = document.getElementById("nextBtn");
-const result = document.getElementById("result");
-const scoreText = document.getElementById("scoreText");
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const nextBtn = document.getElementById("next-btn");
+const resultBox = document.getElementById("result");
+const resultText = document.getElementById("result-text");
 
 function showQuestion() {
   const q = questions[currentQuestion];
 
-  quiz.innerHTML = `
-    <div class="question">${q.question}</div>
-    ${q.answers.map(answer => `
-      <button class="answer-btn" onclick="selectAnswer(${answer.score})">
-        ${answer.text}
-      </button>
-    `).join("")}
-  `;
-}
+  questionEl.innerText = q.question;
+  answersEl.innerHTML = "";
 
-function selectAnswer(score) {
-  totalScore += score;
-  nextBtn.style.display = "block";
-}
+  q.answers.forEach(answer => {
+    const btn = document.createElement("button");
+    btn.innerText = answer.text;
+    btn.classList.add("answer-btn");
 
-nextBtn.addEventListener("click", () => {
+    btn.onclick = () => {
+      totalScore += answer.score;
+
+      document.querySelectorAll(".answer-btn").forEach(b => {
+        b.disabled = true;
+      });
+
+      btn.style.background = "#7c3aed";
+      btn.style.color = "white";
+    };
+
+    answersEl.appendChild(btn);
+  });
+}nextBtn.addEventListener("click", () => {
   currentQuestion++;
 
   if (currentQuestion < questions.length) {
     showQuestion();
-    nextBtn.style.display = "none";
   } else {
     showResult();
   }
 });
 
 function showResult() {
-  document.querySelector(".quiz-container").classList.add("hidden");
-  result.classList.remove("hidden");
+  document.getElementById("quiz-box").style.display = "none";
+  resultBox.style.display = "block";
 
-  let text = "";
-
-  if (totalScore >= 8) {
-    text = "Ти сильний командний гравець та природний лідер 🚀";
-  } else if (totalScore >= 5) {
-    text = "У тебе хороший потенціал для розвитку командних навичок 🌱";
+  if (totalScore >= 5) {
+    resultText.innerText =
+      "Твій стиль — сильний командний лідер 🚀";
   } else {
-    text = "Тобі підійде індивідуальний стиль розвитку 💡";
+    resultText.innerText =
+      "Ти гнучкий командний гравець 🌱";
   }
-
-  scoreText.textContent = text;
 }
 
 showQuestion();
-nextBtn.style.display = "none";
