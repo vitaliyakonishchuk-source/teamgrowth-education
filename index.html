@@ -1,26 +1,35 @@
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TeamGrowth Test</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeamGrowth Pro Assessment</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div class="hero">
-  <h1>TeamGrowth Assessment</h1>
-  <p>Пройди короткий тест та дізнайся свій рівень командного розвитку.</p>
+  <h1>TeamGrowth Leadership Assessment</h1>
+  <p>Пройди професійний тест та дізнайся свій стиль взаємодії в команді.</p>
 </div>
 
-<div class="quiz-container">
-  <div id="quiz"></div>
-  <button id="nextBtn">Далі</button>
-</div>
+<div class="quiz-wrapper">
+  <div class="progress-container">
+    <div id="progress-bar"></div>
+  </div>
 
-<div id="result" class="hidden">
-  <h2>Твій результат</h2>
-  <p id="scoreText"></p>
+  <div id="quiz-box">
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+    <button id="next-btn">Далі</button>
+  </div>
+
+  <div id="result-box" class="hidden">
+    <h2>Твій результат</h2>
+    <p id="result-text"></p>
+    <button onclick="location.reload()">Пройти ще раз</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
