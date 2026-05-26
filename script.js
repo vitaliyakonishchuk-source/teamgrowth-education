@@ -14,8 +14,33 @@ const questions = [
       { text: "Іноді складно", score: 2 },
       { text: "Люблю працювати самостійно", score: 1 }
     ]
+  },
+  {
+    question: "Як ти вирішуєш конфлікти?",
+    answers: [
+      { text: "Через діалог", score: 3 },
+      { text: "Шукаю компроміс", score: 2 },
+      { text: "Уникаю конфліктів", score: 1 }
+    ]
+  },
+  {
+    question: "Що тебе найбільше мотивує?",
+    answers: [
+      { text: "Результат команди", score: 3 },
+      { text: "Особистий розвиток", score: 2 },
+      { text: "Стабільність", score: 1 }
+    ]
+  },
+  {
+    question: "Як ти ставишся до відповідальності?",
+    answers: [
+      { text: "Люблю брати відповідальність", score: 3 },
+      { text: "Залежить від ситуації", score: 2 },
+      { text: "Уникаю зайвого тиску", score: 1 }
+    ]
   }
 ];
+
 let currentQuestion = 0;
 let totalScore = 0;
 
@@ -39,7 +64,7 @@ function showQuestion() {
     btn.onclick = () => {
       totalScore += answer.score;
 
-      document.querySelectorAll(".answer-btn").forEach(b => {
+      Array.from(answersEl.children).forEach(b => {
         b.disabled = true;
       });
 
@@ -49,7 +74,9 @@ function showQuestion() {
 
     answersEl.appendChild(btn);
   });
-}nextBtn.addEventListener("click", () => {
+}
+
+nextBtn.addEventListener("click", () => {
   currentQuestion++;
 
   if (currentQuestion < questions.length) {
@@ -63,13 +90,17 @@ function showResult() {
   document.getElementById("quiz-box").style.display = "none";
   resultBox.style.display = "block";
 
-  if (totalScore >= 5) {
-    resultText.innerText =
-      "Твій стиль — сильний командний лідер 🚀";
+  let result = "";
+
+  if (totalScore >= 13) {
+    result = "Ти сильний командний лідер 🚀";
+  } else if (totalScore >= 9) {
+    result = "Ти добре взаємодієш у команді 👍";
   } else {
-    resultText.innerText =
-      "Ти гнучкий командний гравець 🌱";
+    result = "Тобі комфортніше у спокійному темпі 🌱";
   }
+
+  resultText.innerText = result;
 }
 
 showQuestion();
