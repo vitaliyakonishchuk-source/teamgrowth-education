@@ -47,7 +47,7 @@ let totalScore = 0;
 const questionEl = document.getElementById("question");
 const answersEl = document.getElementById("answers");
 const nextBtn = document.getElementById("next-btn");
-const resultBox = document.getElementById("result");
+const resultBox = document.getElementById("result-box");
 const resultText = document.getElementById("result-text");
 
 function showQuestion() {
@@ -58,6 +58,7 @@ function showQuestion() {
 
   q.answers.forEach(answer => {
     const btn = document.createElement("button");
+
     btn.innerText = answer.text;
     btn.classList.add("answer-btn");
 
