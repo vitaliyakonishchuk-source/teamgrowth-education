@@ -1,48 +1,81 @@
 const questions = [
   {
-    question: "Як ти реагуєш на зміни в команді?",
-    answers: [
-      { text: "Легко адаптуюсь", score: 3 },
-      { text: "Потрібен час", score: 2 },
-      { text: "Уникаю змін", score: 1 }
-    ]
+    question: "Команда ще мало знайома між собою?",
+    stage: "Формування"
   },
   {
-    question: "Наскільки комфортно тобі працювати в команді?",
-    answers: [
-      { text: "Дуже комфортно", score: 3 },
-      { text: "Іноді складно", score: 2 },
-      { text: "Люблю працювати самостійно", score: 1 }
-    ]
+    question: "Люди поводяться обережно?",
+    stage: "Формування"
   },
   {
-    question: "Як ти вирішуєш конфлікти?",
-    answers: [
-      { text: "Через діалог", score: 3 },
-      { text: "Шукаю компроміс", score: 2 },
-      { text: "Уникаю конфліктів", score: 1 }
-    ]
+    question: "Учасники придивляються один до одного?",
+    stage: "Формування"
   },
   {
-    question: "Що тебе найбільше мотивує?",
-    answers: [
-      { text: "Результат команди", score: 3 },
-      { text: "Особистий розвиток", score: 2 },
-      { text: "Стабільність", score: 1 }
-    ]
+    question: "У команді поки мало довіри?",
+    stage: "Формування"
+  },
+
+  {
+    question: "У команді виникають суперечки?",
+    stage: "Зіткнення"
   },
   {
-    question: "Як ти ставишся до відповідальності?",
-    answers: [
-      { text: "Люблю брати відповідальність", score: 3 },
-      { text: "Залежить від ситуації", score: 2 },
-      { text: "Уникаю зайвого тиску", score: 1 }
-    ]
+    question: "Є боротьба за лідерство?",
+    stage: "Зіткнення"
+  },
+  {
+    question: "Люди часто не погоджуються?",
+    stage: "Зіткнення"
+  },
+  {
+    question: "Іноді є напруга в спілкуванні?",
+    stage: "Зіткнення"
+  },
+
+  {
+    question: "Команда вже працює більш стабільно?",
+    stage: "Нормування"
+  },
+  {
+    question: "Люди підтримують одне одного?",
+    stage: "Нормування"
+  },
+  {
+    question: "Є спільні правила роботи?",
+    stage: "Нормування"
+  },
+  {
+    question: "Команда краще взаємодіє?",
+    stage: "Нормування"
+  },
+
+  {
+    question: "Команда працює дуже ефективно?",
+    stage: "Виконання"
+  },
+  {
+    question: "Учасники самостійно вирішують задачі?",
+    stage: "Виконання"
+  },
+  {
+    question: "Команда досягає високих результатів?",
+    stage: "Виконання"
+  },
+  {
+    question: "Люди довіряють одне одному?",
+    stage: "Виконання"
   }
 ];
 
 let currentQuestion = 0;
-let totalScore = 0;
+
+const scores = {
+  "Формування": 0,
+  "Зіткнення": 0,
+  "Нормування": 0,
+  "Виконання": 0
+};
 
 const questionEl = document.getElementById("question");
 const answersEl = document.getElementById("answers");
@@ -50,20 +83,34 @@ const nextBtn = document.getElementById("next-btn");
 const resultBox = document.getElementById("result-box");
 const resultText = document.getElementById("result-text");
 
+let selected = false;
+
 function showQuestion() {
+  selected = false;
+
   const q = questions[currentQuestion];
 
   questionEl.innerText = q.question;
   answersEl.innerHTML = "";
 
-  q.answers.forEach(answer => {
+  const answers = [
+    { text: "Так", score: 2 },
+    { text: "Частково", score: 1 },
+    { text: "Ні", score: 0 }
+  ];
+
+  answers.forEach(answer => {
     const btn = document.createElement("button");
 
     btn.innerText = answer.text;
     btn.classList.add("answer-btn");
 
     btn.onclick = () => {
-      totalScore += answer.score;
+      if (selected) return;
+
+      selected = true;
+
+      scores[q.stage] += answer.score;
 
       Array.from(answersEl.children).forEach(b => {
         b.disabled = true;
@@ -78,6 +125,8 @@ function showQuestion() {
 }
 
 nextBtn.addEventListener("click", () => {
+  if (!selected) return;
+
   currentQuestion++;
 
   if (currentQuestion < questions.length) {
@@ -89,19 +138,48 @@ nextBtn.addEventListener("click", () => {
 
 function showResult() {
   document.getElementById("quiz-box").style.display = "none";
+
   resultBox.style.display = "block";
 
-  let result = "";
+  let bestStage = "";
+  let bestScore = -1;
 
-  if (totalScore >= 13) {
-    result = "Ти сильний командний лідер 🚀";
-  } else if (totalScore >= 9) {
-    result = "Ти добре взаємодієш у команді 👍";
-  } else {
-    result = "Тобі комфортніше у спокійному темпі 🌱";
+  for (const stage in scores) {
+    if (scores[stage] > bestScore) {
+      bestScore = scores[stage];
+      bestStage = stage;
+    }
   }
 
-  resultText.innerText = result;
+  resultText.innerHTML = `
+    <h3>Результати команди:</h3>
+
+    <p>Формування: ${scores["Формування"]}</p>
+    <p>Зіткнення: ${scores["Зіткнення"]}</p>
+    <p>Нормування: ${scores["Нормування"]}</p>
+    <p>Виконання: ${scores["Виконання"]}</p>
+
+    <h2>Поточний етап команди:</h2>
+    <h1>${bestStage}</h1>
+  `;
 }
 
 showQuestion();
+2. Потім натисни зелену кнопку:
+Commit changes
+3. Відкрий сайт і онови сторінку
+(Ctrl + Shift + R)
+Тепер буде:
+✅ 16 питань
+✅ справжній підрахунок
+✅ визначення етапу команди
+✅ професійний результат
+✅ працюючі кнопки
+Голосовий чат закінчився
+
+
+
+
+
+
+
