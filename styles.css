@@ -60,3 +60,47 @@ body {
   text-align: center;
   padding: 50px;
 }
+#question {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.answer-btn {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 12px;
+  background: #ece7f8;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.answer-btn:hover {
+  background: #d9ccff;
+}
+
+#next-btn {
+  display: block;
+  margin-left: auto;
+  margin-top: 25px;
+  padding: 14px 30px;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#next-btn:hover {
+  background: #6929d1;
+}
+
+#result-box {
+  padding: 30px;
+  font-size: 24px;
+}
